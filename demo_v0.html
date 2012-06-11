@@ -27,9 +27,6 @@
         var bottomLeft = group.get(".bottomLeft")[0];
         var image = group.get(".rectangle")[0];
         
-        
-        
-        
         // update anchor positions
         switch (activeAnchor.getName()) {
           case "topLeft":
@@ -50,13 +47,13 @@
             break;
         }
 
-        var alto = topRight.attrs.x - topLeft.attrs.x;
-        var ancho = bottomLeft.attrs.y - topLeft.attrs.y;
+        var alto = (topRight.attrs.x - topLeft.attrs.x);
+        var ancho = (bottomLeft.attrs.y - topLeft.attrs.y);
                 
         image.setPosition(topLeft.attrs.x, topLeft.attrs.y);
         image.setSize(alto, ancho);
        
-        writeMessage(messageLayer, "x: " + alto + ", y: " + ancho);
+        writeMessage(messageLayer, "x: " + (alto/40) + ", y: " + (ancho/40) +"\nArea: "+(alto*ancho/1600)+" m2");
       }
     
     function addAnchor(group, x, y, name, messageLayer) {
