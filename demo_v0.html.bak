@@ -193,9 +193,9 @@
 			</div>
 			<div id="palette"" align="center">
 				<p align="left">Paleta de componentes:</p>
-				<img id=rectangulo align="middle" src="Rectangle.png"/>
+				<img id=rectangulo align="middle" src="C:/Users/Carlos/Documents/El_jardín_de_CARAN/Demo/Rectangle.png"/>
 				<br>
-				<img id=circulo src="Circle.png"/>
+				<img id=circulo src="C:/Users/Carlos/Documents/El_jardín_de_CARAN/Demo/Circle.png"/>
 			</div>
 		</td>
         </tr>
