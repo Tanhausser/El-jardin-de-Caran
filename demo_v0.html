@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      canvas {
+        border: 1px solid #9C9898;
+      }
+	   #container {
+        background-image: url(Fondo2.jpg);
+        display: inline-block;
+        overflow: hidden;
+        height: 765px;
+        width: 980px;
+      }
+    </style>
+    
+    <script>
+    
+    function update(group, activeAnchor, messageLayer) {
+        var topLeft = group.get(".topLeft")[0];
+        var topRight = group.get(".topRight")[0];
+        var bottomRight = group.get(".bottomRight")[0];
+        var bottomLeft = group.get(".bottomLeft")[0];
+        var image = group.get(".rectangle")[0];
+        
+        
+        
+        
+        // update anchor positions
+        switch (activeAnchor.getName()) {
+          case "topLeft":
+            topRight.attrs.y = activeAnchor.attrs.y;
+            bottomLeft.attrs.x = activeAnchor.attrs.x;
+            break;
+          case "topRight":
+            topLeft.attrs.y = activeAnchor.attrs.y;
+            bottomRight.attrs.x = activeAnchor.attrs.x;
+            break;
+          case "bottomRight":
+            bottomLeft.attrs.y = activeAnchor.attrs.y;
+            topRight.attrs.x = activeAnchor.attrs.x;
+            break;
+          case "bottomLeft":
+            bottomRight.attrs.y = activeAnchor.attrs.y;
+            topLeft.attrs.x = activeAnchor.attrs.x;
+            break;
+        }
+
+        var alto = topRight.attrs.x - topLeft.attrs.x;
+        var ancho = bottomLeft.attrs.y - topLeft.attrs.y;
+                
+        image.setPosition(topLeft.attrs.x, topLeft.attrs.y);
+        image.setSize(alto, ancho);
+       
+        writeMessage(messageLayer, "x: " + alto + ", y: " + ancho);
+      }
+    
+    function addAnchor(group, x, y, name, messageLayer) {
+        var stage = group.getStage();
+        var layer = group.getLayer();
+        //var messageLayer = new Kinetic.Layer();
+
+        var anchor = new Kinetic.Circle({
+          x: x,
+          y: y,
+          stroke: "#666",
+          fill: "#ddd",
+          strokeWidth: 2,
+          radius: 5,
+          name: name,
+          draggable: true
+        });
+
+        anchor.on("dragmove", function() {
+          update(group, this, messageLayer);
+          layer.draw();
+        });
+        anchor.on("mousedown touchstart", function() {
+          group.draggable(false);
+          this.moveToTop();
+        });
+        anchor.on("dragend", function() {
+          group.draggable(true);
+          layer.draw();
+        });
+        // add hover styling
+        anchor.on("mouseover", function() {
+          var layer = this.getLayer();
+          document.body.style.cursor = "pointer";
+          this.setStrokeWidth(4);
+          layer.draw();
+        });
+        anchor.on("mouseout", function() {
+          var layer = this.getLayer();
+          document.body.style.cursor = "default";
+          this.setStrokeWidth(2);
+          layer.draw();
+        });
+
+        //stage.add(messageLayer);
+        group.add(anchor);
+        
+      }   
+    
+        function writeMessage(messageLayer, message) {
+        var context = messageLayer.getContext();
+        messageLayer.clear();
+        context.font = "18pt Calibri";
+        context.fillStyle = "black";
+        context.fillText(message, 10, 25);
+      }
+
+    
+      window.onload = function() {
+        var stage = new Kinetic.Stage({
+          container: "container",
+          width: 980,
+          height: 765
+
+        });
+ 
+        var layer = new Kinetic.Layer();
+        var messageLayer = new Kinetic.Layer();
+                 
+        var rectGroup = new Kinetic.Group({
+          x: 739,
+          y: 575,
+          draggable: true
+        });
+ 
+        var rect = new Kinetic.Rect({
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 50,
+
+          fill: "#00D2FF",
+          stroke: "blue",
+          strokeWidth: 4,
+          cornerRadius: 2,
+          alpha:5,
+          draggable: true,
+          name: "rectangle"
+        });
+               
+        layer.add(rectGroup);
+        stage.add(layer);
+        stage.add(messageLayer);
+ 
+        rectGroup.add(rect); 
+        
+        addAnchor(rectGroup, 0, 0, "topLeft", messageLayer);
+        addAnchor(rectGroup, 100, 0, "topRight", messageLayer);
+        addAnchor(rectGroup, 100, 50, "bottomRight", messageLayer);
+        addAnchor(rectGroup, 0, 50, "bottomLeft", messageLayer);
+
+        rectGroup.on("dragstart", function() {
+          this.moveToTop();
+        });
+        // add the shape to the layer
+        layer.add(rectGroup);
+        
+        
+        stage.draw();
+        // add the layer to the stage
+        stage.add(layer);
+        
+      };
+      
+      
+ 
+    </script>
+  </head>
+  <body>
+    <table id=tabla>
+        <tr>
+		<td>
+				<div id="container"></div>
+		</td>
+        <td>
+			<div id="search">    
+				<p align="left">Búsqueda:</p>      
+				<form action="http://www.maps.google.es" target="_blank">
+				   <input type="text" value="Introduce tu dirección..." name="q" size="55" maxlength="256">
+				   <br>
+				   <input name="btnG" type="submit" value="Busca tu piscina CARANPool search">
+				   <input name="hl" type="hidden" value="en">
+				</form>
+			</div>
+			<div id="palette"" align="center">
+				<p align="left">Paleta de componentes:</p>
+				<img id=rectangulo align="middle" src="C:/Demo/Rectangle.png"/>
+				<br>
+				<img id=circulo src="C:/Demo/Circle.png"/>
+			</div>
+		</td>
+        </tr>
+        
+    </table>
+  </body>
+</html>
